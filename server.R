@@ -63,12 +63,7 @@ server <- function(input, output) {
                             'scale' = input$scaleIDT,
                             'pure' = input$purificationIDT) %>% format_delim(delim =sep, col_names = FALSE)
         }
-        # out <- str_replace_all(out, paste0('[',sep,']'), input$delim_out)
-        cat(data.frame("name" = process[,1],
-                       'seqs' = process[,2]) %>% format_delim(delim = '\t', col_names = FALSE))
-        print('----')
-        cat(out)
-        print('----')
+        #looks weird, but need to take care of backslashes and replace \t with actual tabs.
         out <- str_replace_all(out, paste0('[',sep,']'), str_replace_all(str_replace(input$delim_out, '[\\\\]', '\\\\\\\\'), '\\\\t', '  '))
         cat(out)
       }
