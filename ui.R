@@ -1,8 +1,8 @@
-library(tidyverse)
+suppressPackageStartupMessages(library(tidyverse))
 library(shiny)
 library(shinyWidgets)
 library(shinyjs)
-library(DT)
+suppressPackageStartupMessages(library(DT))
 library(rclipboard)
 
 
