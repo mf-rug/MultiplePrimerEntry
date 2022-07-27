@@ -39,7 +39,7 @@ server <- function(input, output) {
     out <- ''
     if (input$seqs != '') {
       pat <- paste0(input$delim, '|\\n')
-      process <- str_split(str_remove(input$seqs, '(?:\\n)+$'), pattern = pat)[[1]]
+      process <- str_split(str_remove(gsub('  *', ' ', input$seqs), '(?:\\n)+$'), pattern = pat)[[1]]
       if (str_count(str_remove(input$seqs, '(?:\\n)+$'), '\\n') + 1 != length(process) /2) { 
         out <- ''
       } else {
@@ -64,20 +64,17 @@ server <- function(input, output) {
                             'pure' = input$purificationIDT) %>% format_delim(delim =sep, col_names = FALSE)
         }
         #looks weird, but need to take care of backslashes and replace \t with actual tabs.
-        out <- str_replace_all(out, paste0('[',sep,']'), str_replace_all(str_replace(input$delim_out, '[\\\\]', '\\\\\\\\'), '\\\\t', '  '))
+        out <- str_replace_all(out, paste0('[',sep,']'), str_replace_all(str_replace(input$delim_out, '[\\\\]', '\\\\\\\\'), '\\\\t', ' \t'))
         cat(out)
       }
     }
-    # out <- str_replace_all(out, sep, str_replace_all(input$delim_out,'[\\\\]', '\\\\\\\\'))
-    print(out)
-    cat(out)
     rclipButton("clipbtn", HTML('<small><font color="grey">Copy to clipboard</font></small>'), out, modal = FALSE, icon("copy"), )
   })
   
   output$out <- renderDT({
     if (input$seqs != '') {
       pat <- paste0(input$delim, '|\\n')
-      process <- str_split(str_remove(input$seqs, '(?:\\n)+$'), pattern = pat)[[1]]
+      process <- str_split(str_remove(gsub('  *', ' ', input$seqs), '(?:\\n)+$'), pattern = pat)[[1]]
       if (str_count(str_remove(input$seqs, '(?:\\n)+$'), '\\n') + 1 != length(process) /2) { 
         hide('hidehr')
         out <- "<i>Problem parsing input</i>"
