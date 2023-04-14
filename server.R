@@ -44,7 +44,7 @@ server <- function(input, output) {
         out <- ''
       } else {
         process <- matrix(process, ncol = str_count(str_remove(input$seqs, '(?:\\n)+$'), '\n') +1) %>% t() %>% as.data.frame()
-        sep <- sample(setdiff(str_split('_"$&+,:;=?@#|\'<>.^*()%!/[]{}\\-', '')[[1]], unique(str_split(input$seqs, '')[[1]])), 1)
+        sep <- sample(setdiff(str_split('_"$&+,:;=?@#|\'<>.*()%!/{}-', '')[[1]], unique(str_split(input$seqs, '')[[1]])), 1)
         if (input$tabs == "Generic") {
           out <- data.frame("name" = process[,1],
                             'seqs' = process[,2]) %>% format_delim(delim =sep, col_names = FALSE)
@@ -64,6 +64,7 @@ server <- function(input, output) {
                             'pure' = input$purificationIDT) %>% format_delim(delim =sep, col_names = FALSE)
         }
         #looks weird, but need to take care of backslashes and replace \t with actual tabs.
+        print(paste('sep', sep, 'input$delim_out', input$delim_out))
         out <- str_replace_all(out, paste0('[',sep,']'), str_replace_all(str_replace(input$delim_out, '[\\\\]', '\\\\\\\\'), '\\\\t', ' \t'))
         cat(out)
       }
