@@ -1,4 +1,6 @@
-suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(magrittr))
+suppressPackageStartupMessages(library(readr))
+suppressPackageStartupMessages(library(stringr))
 library(shiny)
 library(shinyWidgets)
 library(shinyjs)
