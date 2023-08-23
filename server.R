@@ -18,7 +18,12 @@ server <- function(input, output) {
       possible_splits <- unique(possible_splits[possible_splits != ""])
       if (!identical(possible_splits, character(0))) {
         stri <- str_split(str_remove(input$seqs, '(?:\\n)*$'), '\\n')[[1]]
-        stri.df <- sapply(1:length(possible_splits), function(y) sapply(stri, function(x) str_count(x, str_replace_all(possible_splits[y], '(.)', '\\\\\\1')))) %>% as.data.frame()
+        stri.df <-
+          sapply(1:length(possible_splits), function(y)
+            sapply(stri, function(x)
+              str_count(
+                x, str_replace_all(possible_splits[y], '(.)', '\\\\\\1')
+              ))) %>% as.data.frame()
         guess <- possible_splits[which(apply(stri.df, 2, sum) == length(stri))]
         if (length(guess) == 1) {
           updateTextInput(session = getDefaultReactiveDomain(), inputId = 'delim', value = guess)
@@ -65,8 +70,8 @@ server <- function(input, output) {
         }
         #looks weird, but need to take care of backslashes and replace \t with actual tabs.
         print(paste('sep', sep, 'input$delim_out', input$delim_out))
-        out <- str_replace_all(out, paste0('[',sep,']'), str_replace_all(str_replace(input$delim_out, '[\\\\]', '\\\\\\\\'), '\\\\t', ' \t'))
-        cat(out)
+        input_delim_converted <- str_replace(input$delim_out, "\\\\t", "\t")
+        out <- str_replace_all(out, paste0('[',sep,']'), input_delim_converted)
       }
     }
     rclipButton("clipbtn", HTML('<small><font color="grey">Copy to clipboard</font></small>'), out, modal = FALSE, icon("copy"), )
